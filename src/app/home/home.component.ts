@@ -89,11 +89,7 @@ export class HomeComponent implements OnInit {
             }
         }).then(() => {
             console.log("scanning complete");
-
             this.showDevicesDialog();
-
-
-
         }, err => {
             console.log("error while scanning: " + err);
         });
