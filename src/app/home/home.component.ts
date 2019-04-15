@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
     private requestCoarseLocationPermission() {
         this.bluetooth.requestCoarseLocationPermission().then(granted => {
             if (granted) {
-                this.putBluetoothOn();
+
             }
         });
     }
