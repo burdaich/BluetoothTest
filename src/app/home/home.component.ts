@@ -5,6 +5,9 @@ import { Button } from "tns-core-modules/ui/button";
 import * as dialogs from "tns-core-modules/ui/dialogs";
 import { GestureEventData } from "tns-core-modules/ui/gestures/gestures";
 import { enable } from "tns-core-modules/trace/trace";
+import { isAndroid, isIOS } from 'tns-core-modules/ui/page';
+
+
 
 
 
@@ -63,37 +66,36 @@ export class HomeComponent implements OnInit {
     private requestCoarseLocationPermission() {
         this.bluetooth.requestCoarseLocationPermission().then(granted => {
             if (granted) {
-                this.putBluetoothOn();
+
             }
         });
     }
 
     private putBluetoothOn() {
-        this.bluetooth.enable().then(
-            enabled => {
-                if (enabled) {
-                    this.scanBluetoohDevices();
+        if(isAndroid){
+            this.bluetooth.enable().then(
+                enabled => {
+                    if (enabled) {
+                        this.scanBluetoohDevices();
+                    }
                 }
-                // use Bluetooth features if enabled is true 
-            }
-        );
+            );
+        }else{
+            this.scanBluetoohDevices();
+        }
     }
     scanBluetoohDevices() {
         this.bluetooth.startScanning({
             serviceUUIDs: [],
             seconds: 15,
             onDiscovered: peripheral => {
-                if (peripheral.name != null && peripheral.name != ""){
+                if (peripheral.name != null && peripheral.name != "") {
                     this.bluetoothNames = [...this.bluetoothNames, peripheral.name];
                 }
             }
         }).then(() => {
             console.log("scanning complete");
-
             this.showDevicesDialog();
-
-
-
         }, err => {
             console.log("error while scanning: " + err);
         });
